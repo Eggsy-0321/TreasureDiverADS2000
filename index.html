@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dive Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <main class="game-shell">
+    <section class="canvas-panel">
+      <canvas id="gameCanvas" width="960" height="540" aria-label="Dive game screen"></canvas>
+      <section id="lockModal" class="lock-modal hidden" aria-hidden="true">
+        <div class="lock-panel" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+          <div class="lock-oxygen" aria-label="酸素残量">
+            <span class="lock-oxygen-label">酸素</span>
+            <div class="lock-oxygen-gauge" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+              <div id="lockOxygenGaugeFill" class="lock-oxygen-gauge-fill"></div>
+            </div>
+            <strong id="lockOxygenValue" class="lock-oxygen-value">100%</strong>
+          </div>
+          <p class="lock-eyebrow">DIAL LOCK</p>
+          <h2 id="lockTitle">宝箱の鍵を開ける</h2>
+          <p id="lockHint" class="lock-hint">上下にダイアルを回して4桁をそろえる</p>
+          <div class="dial-grid" aria-label="4 digit lock">
+            <div class="dial-column" data-digit-index="0">
+              <button type="button" class="dial-button" data-action="up" data-digit-index="0" aria-label="1桁目を上げる">▲</button>
+              <strong class="dial-value" id="dialValue0">0</strong>
+              <button type="button" class="dial-button" data-action="down" data-digit-index="0" aria-label="1桁目を下げる">▼</button>
+            </div>
+            <div class="dial-column" data-digit-index="1">
+              <button type="button" class="dial-button" data-action="up" data-digit-index="1" aria-label="2桁目を上げる">▲</button>
+              <strong class="dial-value" id="dialValue1">0</strong>
+              <button type="button" class="dial-button" data-action="down" data-digit-index="1" aria-label="2桁目を下げる">▼</button>
+            </div>
+            <div class="dial-column" data-digit-index="2">
+              <button type="button" class="dial-button" data-action="up" data-digit-index="2" aria-label="3桁目を上げる">▲</button>
+              <strong class="dial-value" id="dialValue2">0</strong>
+              <button type="button" class="dial-button" data-action="down" data-digit-index="2" aria-label="3桁目を下げる">▼</button>
+            </div>
+            <div class="dial-column dial-column-gap" data-digit-index="3">
+              <button type="button" class="dial-button" data-action="up" data-digit-index="3" aria-label="4桁目を上げる">▲</button>
+              <strong class="dial-value" id="dialValue3">0</strong>
+              <button type="button" class="dial-button" data-action="down" data-digit-index="3" aria-label="4桁目を下げる">▼</button>
+            </div>
+          </div>
+          <div class="lock-actions">
+            <button type="button" id="lockSubmitButton" class="lock-submit">解除する</button>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,320 @@
+:root {
+  --bg-top: #03111c;
+  --bg-bottom: #072c43;
+  --panel: rgba(5, 18, 31, 0.78);
+  --panel-border: rgba(124, 212, 255, 0.22);
+  --accent: #ffd468;
+  --text: #eff9ff;
+  --muted: #9fd4ea;
+  --canvas-reserved-height: 150px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  font-family: "Trebuchet MS", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, rgba(80, 182, 255, 0.2), transparent 35%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+}
+
+.game-shell {
+  width: min(1180px, calc(100vw - 24px));
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: 12px 0 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.canvas-panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(8px);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.7vw, 2.5rem);
+}
+
+.canvas-panel {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+#gameCanvas {
+  display: block;
+  width: min(100%, max(0px, calc((100dvh - var(--canvas-reserved-height)) * 16 / 9)));
+  max-width: 100%;
+  max-height: calc(100dvh - var(--canvas-reserved-height));
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 0;
+  margin-inline: auto;
+  background: linear-gradient(180deg, #0c517a 0%, #04283f 55%, #03141f 100%);
+}
+
+.lock-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 9, 18, 0.58);
+  backdrop-filter: blur(4px);
+}
+
+.lock-modal.hidden {
+  display: none;
+}
+
+.lock-panel {
+  width: min(100%, 540px);
+  max-height: calc(100% - 8px);
+  padding: clamp(12px, 2.6dvh, 20px) clamp(12px, 2.8vw, 20px) clamp(10px, 2dvh, 16px);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(18, 39, 54, 0.98), rgba(8, 21, 31, 0.96));
+  border: 1px solid rgba(255, 214, 104, 0.28);
+  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.38);
+  text-align: center;
+  overflow: hidden;
+}
+
+.lock-oxygen {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(10px, 1.8dvh, 16px);
+  padding: 10px 12px;
+  border: 1px solid rgba(164, 222, 245, 0.16);
+  border-radius: 16px;
+  background: rgba(3, 15, 24, 0.46);
+}
+
+.lock-oxygen-label {
+  color: #d6eef8;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.lock-oxygen-gauge {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.lock-oxygen-gauge-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #62e5ff 0%, #2eb6ff 50%, #0b7cf2 100%);
+  transition: width 120ms linear, background 120ms linear;
+}
+
+.lock-oxygen-value {
+  min-width: 52px;
+  color: #f5fbff;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.lock-eyebrow {
+  margin: 0 0 clamp(4px, 0.8dvh, 6px);
+  color: var(--accent);
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+}
+
+.lock-panel h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 1.9vw, 1.8rem);
+}
+
+.lock-hint {
+  margin: clamp(6px, 1.2dvh, 8px) 0 clamp(10px, 2dvh, 14px);
+  color: #c6e8f5;
+  font-size: 0.9rem;
+}
+
+.dial-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(6px, 1.4dvh, 12px);
+  align-items: center;
+}
+
+.dial-column {
+  display: grid;
+  gap: clamp(4px, 1dvh, 8px);
+  justify-items: center;
+}
+
+.dial-column-gap {
+  margin-left: clamp(4px, 1.2vw, 12px);
+}
+
+.dial-column.is-selected .dial-value {
+  border-color: rgba(255, 212, 104, 0.9);
+  box-shadow: 0 0 0 3px rgba(255, 212, 104, 0.16);
+  transform: translateY(-1px);
+}
+
+.dial-button {
+  width: 100%;
+  max-width: clamp(54px, 14vw, 78px);
+  padding: clamp(6px, 1.2dvh, 9px) 0;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #28556e, #173648);
+  color: #eefaff;
+  font-size: clamp(0.78rem, 1.8dvh, 0.95rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.dial-button:hover,
+.dial-button:focus-visible {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  outline: none;
+}
+
+.dial-value {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: clamp(56px, 13dvh, 86px);
+  border-radius: 16px;
+  border: 1px solid rgba(164, 222, 245, 0.2);
+  background: linear-gradient(180deg, rgba(4, 13, 20, 0.86), rgba(11, 29, 42, 0.94));
+  color: #f9feff;
+  font-size: clamp(1.9rem, 6dvh, 3.5rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.lock-actions {
+  margin-top: clamp(10px, 1.8dvh, 16px);
+}
+
+.lock-submit {
+  min-width: clamp(140px, 32vw, 170px);
+  padding: clamp(9px, 1.4dvh, 11px) 18px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffd968, #f5b34d);
+  color: #142430;
+  font-size: 0.96rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lock-submit:hover,
+.lock-submit:focus-visible {
+  filter: brightness(1.04);
+  outline: none;
+}
+
+@media (max-width: 720px) {
+  :root {
+    --canvas-reserved-height: 120px;
+  }
+
+  .game-shell {
+    width: min(100%, calc(100vw - 16px));
+    padding-top: 8px;
+  }
+
+  .lock-panel {
+    padding: 16px 12px 14px;
+  }
+
+  .lock-oxygen {
+    gap: 8px;
+    padding: 8px 10px;
+  }
+
+  .lock-oxygen-label,
+  .lock-oxygen-value {
+    font-size: 0.82rem;
+  }
+
+  .dial-grid {
+    gap: 6px;
+  }
+
+  .dial-column-gap {
+    margin-left: 4px;
+  }
+
+  .dial-button {
+    max-width: none;
+    padding: 8px 0;
+    font-size: 0.88rem;
+  }
+
+  .dial-value {
+    min-height: 72px;
+    font-size: 2rem;
+  }
+}
+
+@media (max-height: 760px) {
+  .lock-modal {
+    padding: 12px;
+  }
+
+  .lock-panel {
+    border-radius: 20px;
+  }
+
+  .lock-hint {
+    font-size: 0.84rem;
+  }
+}
+
+@media (max-height: 660px) {
+  .lock-modal {
+    padding: 8px;
+  }
+
+  .lock-eyebrow {
+    font-size: 0.72rem;
+  }
+
+  .lock-panel h2 {
+    font-size: clamp(1.05rem, 3.2dvh, 1.45rem);
+  }
+
+  .lock-hint {
+    font-size: 0.78rem;
+  }
+}
