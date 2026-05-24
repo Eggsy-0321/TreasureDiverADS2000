@@ -11,6 +11,15 @@
   <main class="game-shell">
     <section class="canvas-panel">
       <canvas id="gameCanvas" width="960" height="540" aria-label="Dive game screen"></canvas>
+      <section class="touch-controls" aria-label="スマホ操作ボタン">
+        <div class="touch-pad" role="group" aria-label="移動">
+          <button type="button" class="touch-button touch-button-up" data-touch-control="up" aria-label="上に移動">▲</button>
+          <button type="button" class="touch-button touch-button-left" data-touch-control="left" aria-label="左に移動">◀</button>
+          <button type="button" class="touch-button touch-button-right" data-touch-control="right" aria-label="右に移動">▶</button>
+          <button type="button" class="touch-button touch-button-down" data-touch-control="down" aria-label="下に移動">▼</button>
+        </div>
+        <button type="button" id="touchActionButton" class="touch-button touch-action-button" aria-label="ゲーム開始または決定">START</button>
+      </section>
       <section id="lockModal" class="lock-modal hidden" aria-hidden="true">
         <div class="lock-panel" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
           <div class="lock-oxygen" aria-label="酸素残量">

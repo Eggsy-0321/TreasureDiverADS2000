@@ -30,6 +30,8 @@ const lockOxygenValueElement = document.getElementById("lockOxygenValue");
 const lockModalElement = document.getElementById("lockModal");
 const lockHintElement = document.getElementById("lockHint");
 const lockSubmitButton = document.getElementById("lockSubmitButton");
+const touchActionButton = document.getElementById("touchActionButton");
+const touchControlButtons = Array.from(document.querySelectorAll("[data-touch-control]"));
 const dialValueElements = Array.from(document.querySelectorAll(".dial-value"));
 const dialColumnElements = Array.from(document.querySelectorAll(".dial-column"));
 const keys = {
@@ -269,6 +271,7 @@ function bindInput() {
   window.addEventListener("keydown", (event) => handleKeyChange(event, true));
   window.addEventListener("keyup", (event) => handleKeyChange(event, false));
   bindLockControls();
+  bindTouchControls();
 }
 
 function bindLockControls() {
@@ -287,6 +290,60 @@ function bindLockControls() {
 
   lockSubmitButton.addEventListener("click", () => {
     tryUnlockChest();
+  });
+}
+
+function bindTouchControls() {
+  const controlMap = {
+    left: "left",
+    right: "right",
+    up: "up",
+    down: "down"
+  };
+
+  const releaseControl = (controlName, button) => {
+    if (controlName in keys) {
+      keys[controlName] = false;
+    }
+
+    button.classList.remove("is-pressed");
+  };
+
+  touchControlButtons.forEach((button) => {
+    const controlName = controlMap[button.dataset.touchControl];
+
+    if (!controlName) {
+      return;
+    }
+
+    button.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      if (game.state !== GameState.PLAYING) {
+        return;
+      }
+
+      keys[controlName] = true;
+      button.classList.add("is-pressed");
+    });
+
+    ["pointerup", "pointercancel", "pointerleave"].forEach((eventName) => {
+      button.addEventListener(eventName, () => {
+        releaseControl(controlName, button);
+      });
+    });
+  });
+
+  touchActionButton?.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    if (game.state === GameState.LOCK) {
+      tryUnlockChest();
+      return;
+    }
+
+    if (game.state !== GameState.PLAYING) {
+      startGame();
+    }
   });
 }
 
@@ -431,11 +488,13 @@ function openLockModal(chestIndex) {
   lockHintElement.textContent = "上下にダイアルを回して4桁をそろえる";
   lockModalElement.classList.remove("hidden");
   lockModalElement.setAttribute("aria-hidden", "false");
+  updateStartButtonLabel();
 }
 
 function closeLockModal() {
   lockModalElement.classList.add("hidden");
   lockModalElement.setAttribute("aria-hidden", "true");
+  updateStartButtonLabel();
 }
 
 function moveDialSelection(delta) {
@@ -830,7 +889,26 @@ function updateHud() {
 }
 
 function updateStartButtonLabel() {
-  return;
+  if (!touchActionButton) {
+    return;
+  }
+
+  if (game.state === GameState.LOCK) {
+    touchActionButton.textContent = "UNLOCK";
+    return;
+  }
+
+  if (game.state === GameState.PLAYING) {
+    touchActionButton.textContent = "PLAYING";
+    return;
+  }
+
+  if (game.state === GameState.CLEAR || game.state === GameState.GAME_OVER) {
+    touchActionButton.textContent = "RETRY";
+    return;
+  }
+
+  touchActionButton.textContent = "START";
 }
 
 function gameLoop(timestamp) {

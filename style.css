@@ -7,6 +7,7 @@
   --text: #eff9ff;
   --muted: #9fd4ea;
   --canvas-reserved-height: 150px;
+  --touch-controls-height: 0px;
 }
 
 * {
@@ -19,6 +20,7 @@ body {
   overflow-x: hidden;
   font-family: "Trebuchet MS", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   color: var(--text);
+  touch-action: manipulation;
   background:
     radial-gradient(circle at top, rgba(80, 182, 255, 0.2), transparent 35%),
     linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
@@ -57,7 +59,7 @@ h1 {
 
 .canvas-panel {
   position: relative;
-  padding: 0;
+  padding: 0 0 var(--touch-controls-height);
   overflow: hidden;
 }
 
@@ -71,6 +73,72 @@ h1 {
   margin: 0;
   margin-inline: auto;
   background: linear-gradient(180deg, #0c517a 0%, #04283f 55%, #03141f 100%);
+}
+
+.touch-controls {
+  display: none;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(3, 11, 18, 0), rgba(3, 11, 18, 0.72) 24%, rgba(3, 11, 18, 0.88));
+}
+
+.touch-pad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  gap: 8px;
+  width: min(220px, 100%);
+}
+
+.touch-button {
+  min-width: 0;
+  min-height: 56px;
+  border: 1px solid rgba(164, 222, 245, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(43, 91, 117, 0.96), rgba(14, 35, 48, 0.96));
+  color: #effbff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+.touch-button:active,
+.touch-button.is-pressed {
+  transform: translateY(1px) scale(0.98);
+  filter: brightness(1.1);
+}
+
+.touch-button-up {
+  grid-area: up;
+}
+
+.touch-button-left {
+  grid-area: left;
+}
+
+.touch-button-right {
+  grid-area: right;
+}
+
+.touch-button-down {
+  grid-area: down;
+}
+
+.touch-action-button {
+  min-width: 132px;
+  padding: 0 18px;
+  background: linear-gradient(90deg, #ffd968, #f5b34d);
+  color: #142430;
+  font-size: 0.95rem;
 }
 
 .lock-modal {
@@ -245,12 +313,18 @@ h1 {
 
 @media (max-width: 720px) {
   :root {
-    --canvas-reserved-height: 120px;
+    --canvas-reserved-height: 164px;
+    --touch-controls-height: 118px;
   }
 
   .game-shell {
     width: min(100%, calc(100vw - 16px));
     padding-top: 8px;
+    justify-content: start;
+  }
+
+  .touch-controls {
+    display: flex;
   }
 
   .lock-panel {
@@ -284,6 +358,27 @@ h1 {
   .dial-value {
     min-height: 72px;
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 520px) {
+  :root {
+    --canvas-reserved-height: 204px;
+    --touch-controls-height: 158px;
+  }
+
+  .touch-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .touch-pad {
+    width: 100%;
+  }
+
+  .touch-action-button {
+    width: 100%;
+    min-height: 52px;
   }
 }
 
